@@ -12,6 +12,10 @@ import ij.ImageJ;
 import ij.ImagePlus;
 import ij.plugin.PlugIn;
 import ij.process.ImageProcessor;
+import java.io.*;
+import java.net.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A template for processing each pixel of either GRAY8, GRAY16, GRAY32 or
@@ -20,6 +24,7 @@ import ij.process.ImageProcessor;
  * @author Johannes Schindelin
  */
 public class Process_Pixels implements PlugIn {
+
     protected ImagePlus image;
 
     public Process_Pixels() {
@@ -30,7 +35,45 @@ public class Process_Pixels implements PlugIn {
 
     @Override
     public void run(String arg) {
-        System.out.println("In run.");
+        System.out.println("Running LiveViewer");
+
+        while (true) {
+            URL server_url;
+            try {
+                System.out.println("Starting frame download...");
+                server_url = new URL("http://10.156.2.28:8081");
+                URLConnection conn = server_url.openConnection();
+                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+                System.out.print("Reading buffer from download... ");
+                InputStream is = conn.getInputStream();
+                int nRead;
+                byte[] data = new byte[4096];
+                while ((nRead = is.readNBytes(data, 0, data.length)) != 0) {
+                    buffer.write(data, 0, nRead);
+                }
+                buffer.flush();
+                byte[] targetArray = buffer.toByteArray();
+                System.out.println("Total data read: " + targetArray.length);
+
+                for (int channel = 1; channel <= 3; channel++) {
+                    ImageProcessor processor = image.getImageStack().getProcessor(channel);
+                    short[] pixels = (short[]) processor.getPixels();
+                    final int idx = 2304 * 2304 * 2 * channel;
+                    for (int i = 0; i < 2304 * 2304; i++) {
+                        int val = (int) targetArray[idx + (2 * i)] << 8;
+                        val += (int) targetArray[idx + (2 * i) + 1]; /// TODO: check
+                        pixels[i] = (short) val;
+                    }
+                    pixels[0] = 0;
+                }
+                
+                image.resetDisplayRange();
+                image.updateAndDraw();
+            } catch (Exception ex) {
+                // ¯\_(ツ)_/¯
+            }
+        }
     }
 
     /**
@@ -55,35 +98,7 @@ public class Process_Pixels implements PlugIn {
         // open the Clown sample
         //ImagePlus image = IJ.openImage("http://imagej.net/images/clown.jpg");
         //image.show();
-
         // run the plugin
         IJ.runPlugIn(clazz.getName(), "");
-
-        /*
-        ImagePlus image = IJ.createHyperStack("Test", 2304, 2304, 3, 1, 1, 16);
-        image.show();
-
-        for (int i = 1; i <= 3; i++) {
-            ImageProcessor processor = image.getImageStack().getProcessor(i);
-            short[] pixels = (short[]) processor.getPixels();
-            for (int j = 0; j <= 2304 * 30; j++) {
-                pixels[j] = 1;
-            }
-        }*/
-
-        /*
-        System.out.println("Hello World;");
-        
-        URL yahoo = new URL("http://google.com");
-        URLConnection yc = yahoo.openConnection();
-        BufferedReader in = new BufferedReader(
-                                new InputStreamReader(
-                                yc.getInputStream()));
-        String inputLine;
-
-        while ((inputLine = in.readLine()) != null) 
-            System.out.println(inputLine);
-        in.close();
-         */
     }
 }
