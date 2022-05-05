@@ -26,9 +26,11 @@ import java.util.logging.Logger;
 public class Process_Pixels implements PlugIn {
 
     protected ImagePlus image;
+    protected LiveViewControl control_window;
 
     public Process_Pixels() {
         System.out.println("Setting up LiveViewer...");
+        control_window = new LiveViewControl();
         image = IJ.createHyperStack("Test", 2304, 2304, 3, 1, 1, 16);
         image.show();
     }
@@ -38,40 +40,50 @@ public class Process_Pixels implements PlugIn {
         System.out.println("Running LiveViewer");
 
         while (true) {
-            URL server_url;
-            try {
-                System.out.println("Starting frame download...");
-                server_url = new URL("http://10.156.2.28:8081");
-                URLConnection conn = server_url.openConnection();
-                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            if (control_window.getLiveViewToggle()) {
+                URL server_url;
+                try {
+                    System.out.println("Starting frame download...");
+                    server_url = new URL("http://10.156.2.28:8081");
+                    URLConnection conn = server_url.openConnection();
+                    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
-                System.out.print("Reading buffer from download... ");
-                InputStream is = conn.getInputStream();
-                int nRead;
-                byte[] data = new byte[4096];
-                while ((nRead = is.readNBytes(data, 0, data.length)) != 0) {
-                    buffer.write(data, 0, nRead);
-                }
-                buffer.flush();
-                byte[] targetArray = buffer.toByteArray();
-                System.out.println("Total data read: " + targetArray.length);
-
-                for (int channel = 1; channel <= 3; channel++) {
-                    ImageProcessor processor = image.getImageStack().getProcessor(channel);
-                    short[] pixels = (short[]) processor.getPixels();
-                    final int idx = 2304 * 2304 * 2 * channel;
-                    for (int i = 0; i < 2304 * 2304; i++) {
-                        int val = (int) targetArray[idx + (2 * i)] << 8;
-                        val += (int) targetArray[idx + (2 * i) + 1]; /// TODO: check
-                        pixels[i] = (short) val;
+                    System.out.print("Reading buffer from download... ");
+                    InputStream is = conn.getInputStream();
+                    int nRead;
+                    byte[] data = new byte[4096];
+                    while ((nRead = is.readNBytes(data, 0, data.length)) != 0) {
+                        buffer.write(data, 0, nRead);
                     }
-                    pixels[0] = 0;
+
+                    buffer.flush();
+                    byte[] targetArray = buffer.toByteArray();
+                    System.out.println("Total data read: " + targetArray.length);
+
+                    for (int channel = 1; channel <= 3; channel++) {
+                        ImageProcessor processor = image.getImageStack().getProcessor(channel);
+                        short[] pixels = (short[]) processor.getPixels();
+
+                        final int idx = 2304 * 2304 * 2 * (channel - 1); // why imagej????
+                        for (int i = 0; i < 2304 * 2304; i++) {
+                            int val = (int) targetArray[idx + (2 * i)] << 8;
+                            val += (int) targetArray[idx + (2 * i) + 1]; /// TODO: check
+                            pixels[i] = (short) val;
+                        }
+                    }
+
+                    image.resetDisplayRange();
+                    image.updateAndDraw();
+                } catch (Exception ex) {
+                    System.err.println("Exception caught.");
+                    // ¯\_(ツ)_/¯
                 }
-                
-                image.resetDisplayRange();
-                image.updateAndDraw();
-            } catch (Exception ex) {
-                // ¯\_(ツ)_/¯
+            } else {
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    // Who cares?
+                }
             }
         }
     }
