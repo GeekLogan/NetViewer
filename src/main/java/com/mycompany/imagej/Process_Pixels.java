@@ -50,15 +50,17 @@ public class Process_Pixels implements PlugIn {
 
                     System.out.print("Reading buffer from download... ");
                     InputStream is = conn.getInputStream();
-                    int nRead;
+                    int nRead = 0;
                     byte[] data = new byte[4096];
-                    while ((nRead = is.readNBytes(data, 0, data.length)) != 0) {
+                    while ((nRead = is.read(data)) != -1) {
                         buffer.write(data, 0, nRead);
                     }
+                    is.close();
 
                     buffer.flush();
                     byte[] targetArray = buffer.toByteArray();
                     System.out.println("Total data read: " + targetArray.length);
+                    System.out.println("\tEx: " + targetArray[0] + ", " + targetArray[1] + ", " + targetArray[2]);
 
                     for (int channel = 1; channel <= 3; channel++) {
                         ImageProcessor processor = image.getImageStack().getProcessor(channel);
@@ -66,15 +68,16 @@ public class Process_Pixels implements PlugIn {
 
                         final int idx = 2304 * 2304 * 2 * (channel - 1); // why imagej????
                         for (int i = 0; i < 2304 * 2304; i++) {
-                            int val = (int) targetArray[idx + (2 * i)] << 8;
-                            val += (int) targetArray[idx + (2 * i) + 1]; /// TODO: check
+                            int val = (int) targetArray[idx + (2 * i)];
+                            val += (int) targetArray[idx + (2 * i) + 1] << 8; /// TODO: check
                             pixels[i] = (short) val;
                         }
-                    }
+                    } 
 
                     image.resetDisplayRange();
                     image.updateAndDraw();
                 } catch (Exception ex) {
+                    System.err.println(ex);
                     System.err.println("Exception caught.");
                     // ¯\_(ツ)_/¯
                 }
