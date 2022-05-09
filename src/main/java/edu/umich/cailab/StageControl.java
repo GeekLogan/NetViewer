@@ -82,6 +82,9 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
     @Override
     public void run(String string) {
         System.out.println("Yeet!");
+        
+        StageControl window = new StageControl();
+        window.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
