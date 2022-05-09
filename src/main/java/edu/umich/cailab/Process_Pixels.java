@@ -5,7 +5,7 @@
  * See the CC0 1.0 Universal license for details:
  *     http://creativecommons.org/publicdomain/zero/1.0/
  */
-package com.mycompany.imagej;
+package edu.umich.cailab;
 
 import ij.IJ;
 import ij.ImageJ;
@@ -68,8 +68,8 @@ public class Process_Pixels implements PlugIn {
 
                         final int idx = 2304 * 2304 * 2 * (channel - 1); // why imagej????
                         for (int i = 0; i < 2304 * 2304; i++) {
-                            int val = (int) targetArray[idx + (2 * i)];
-                            val += (int) targetArray[idx + (2 * i) + 1] << 8; /// TODO: check
+                            int val = targetArray[idx + (2 * i)];
+                            //val += (int) targetArray[idx + (2 * i) + 1] << 8; /// TODO: check
                             pixels[i] = (short) val;
                         }
                     } 
