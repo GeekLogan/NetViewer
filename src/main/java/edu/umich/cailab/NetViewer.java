@@ -23,12 +23,12 @@ import java.util.logging.Logger;
  *
  * @author Johannes Schindelin
  */
-public class Process_Pixels implements PlugIn {
+public class NetViewer implements PlugIn {
 
     protected ImagePlus image;
     protected LiveViewControl control_window;
 
-    public Process_Pixels() {
+    public NetViewer() {
         System.out.println("Setting up LiveViewer...");
         control_window = new LiveViewControl();
         image = IJ.createHyperStack("Test", 2304, 2304, 3, 1, 1, 16);
@@ -102,7 +102,7 @@ public class Process_Pixels implements PlugIn {
     public static void main(String[] args) throws Exception {
         // set the plugins.dir property to make the plugin appear in the Plugins menu
         // see: https://stackoverflow.com/a/7060464/1207769
-        Class<?> clazz = Process_Pixels.class;
+        Class<?> clazz = NetViewer.class;
         java.net.URL url = clazz.getProtectionDomain().getCodeSource().getLocation();
         java.io.File file = new java.io.File(url.toURI());
         System.setProperty("plugins.dir", file.getAbsolutePath());
