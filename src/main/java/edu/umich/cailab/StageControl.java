@@ -61,9 +61,8 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
             return "ERROR";
         }
 
-        System.out.println("Total data read: " + targetArray.length);
-        System.out.println("\tEx: " + targetArray[0] + ", " + targetArray[1] + ", " + targetArray[2]);
-
+        //System.out.println("Total data read: " + targetArray.length);
+        //System.out.println("\tEx: " + targetArray[0] + ", " + targetArray[1] + ", " + targetArray[2]);
         return new String(targetArray, StandardCharsets.UTF_8);
     }
 
@@ -94,38 +93,454 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jFrame1 = new javax.swing.JFrame();
         jSlider1 = new javax.swing.JSlider();
+        jTextField1 = new javax.swing.JTextField();
         jSlider2 = new javax.swing.JSlider();
+        jTextField2 = new javax.swing.JTextField();
         jSlider3 = new javax.swing.JSlider();
+        jTextField3 = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jTextField4 = new javax.swing.JTextField();
+        jTextField5 = new javax.swing.JTextField();
+        jTextField6 = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        MoreLeftButton = new javax.swing.JButton();
+        LeftButton = new javax.swing.JButton();
+        RightButton = new javax.swing.JButton();
+        MoreRightButton = new javax.swing.JButton();
+        MoreUpButton = new javax.swing.JButton();
+        TopButton = new javax.swing.JButton();
+        DownButton = new javax.swing.JButton();
+        MoreDownButton = new javax.swing.JButton();
+        MoreZDownButton = new javax.swing.JButton();
+        ZDownButton = new javax.swing.JButton();
+        ZUpButton = new javax.swing.JButton();
+        MoreZUpButton = new javax.swing.JButton();
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
+        jFrame1.getContentPane().setLayout(jFrame1Layout);
+        jFrame1Layout.setHorizontalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jFrame1Layout.setVerticalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(320, 420));
+        setMinimumSize(new java.awt.Dimension(320, 420));
+        setPreferredSize(new java.awt.Dimension(320, 420));
+
+        jSlider1.setMaximum(25);
+        jSlider1.setValue(0);
+        jSlider1.setEnabled(false);
+
+        jTextField1.setText("jTextField1");
+        jTextField1.setEnabled(false);
+
+        jSlider2.setMaximum(50);
+        jSlider2.setMinimum(-50);
+        jSlider2.setValue(0);
+        jSlider2.setEnabled(false);
+
+        jTextField2.setText("jTextField1");
+        jTextField2.setEnabled(false);
+
+        jSlider3.setMaximum(50);
+        jSlider3.setMinimum(-50);
+        jSlider3.setValue(0);
+        jSlider3.setEnabled(false);
+
+        jTextField3.setText("jTextField1");
+        jTextField3.setEnabled(false);
+
+        jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        jLabel1.setText("X");
+
+        jLabel2.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        jLabel2.setText("Y");
+
+        jLabel3.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        jLabel3.setText("Z");
+
+        jLabel4.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        jLabel4.setText("X");
+
+        jLabel5.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        jLabel5.setText("Y");
+
+        jLabel6.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        jLabel6.setText("Z");
+
+        jTextField4.setText("0");
+
+        jTextField5.setText("0");
+
+        jTextField6.setText("0");
+
+        jButton1.setText("GO");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("GO");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("GO");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        MoreLeftButton.setBackground(new java.awt.Color(204, 204, 255));
+        MoreLeftButton.setText("<<");
+        MoreLeftButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MoreLeftButtonActionPerformed(evt);
+            }
+        });
+
+        LeftButton.setBackground(new java.awt.Color(204, 204, 255));
+        LeftButton.setText("<<");
+        LeftButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LeftButtonActionPerformed(evt);
+            }
+        });
+
+        RightButton.setBackground(new java.awt.Color(204, 204, 255));
+        RightButton.setText(">>");
+        RightButton.setToolTipText("");
+        RightButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RightButtonActionPerformed(evt);
+            }
+        });
+
+        MoreRightButton.setBackground(new java.awt.Color(204, 204, 255));
+        MoreRightButton.setText(">>");
+        MoreRightButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MoreRightButtonActionPerformed(evt);
+            }
+        });
+
+        MoreUpButton.setBackground(new java.awt.Color(204, 204, 255));
+        MoreUpButton.setText("∧∧");
+        MoreUpButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MoreUpButtonActionPerformed(evt);
+            }
+        });
+
+        TopButton.setBackground(new java.awt.Color(204, 204, 255));
+        TopButton.setText("∧∧");
+        TopButton.setToolTipText("");
+        TopButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TopButtonActionPerformed(evt);
+            }
+        });
+
+        DownButton.setBackground(new java.awt.Color(204, 204, 255));
+        DownButton.setText("∨∨");
+        DownButton.setToolTipText("");
+        DownButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DownButtonActionPerformed(evt);
+            }
+        });
+
+        MoreDownButton.setBackground(new java.awt.Color(204, 204, 255));
+        MoreDownButton.setText("∨∨");
+        MoreDownButton.setToolTipText("");
+        MoreDownButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MoreDownButtonActionPerformed(evt);
+            }
+        });
+
+        MoreZDownButton.setText("∨∨");
+        MoreZDownButton.setToolTipText("");
+        MoreZDownButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MoreZDownButtonActionPerformed(evt);
+            }
+        });
+
+        ZDownButton.setText("∨∨");
+        ZDownButton.setToolTipText("");
+        ZDownButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ZDownButtonActionPerformed(evt);
+            }
+        });
+
+        ZUpButton.setText("∧∧");
+        ZUpButton.setToolTipText("");
+        ZUpButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ZUpButtonActionPerformed(evt);
+            }
+        });
+
+        MoreZUpButton.setText("∧∧");
+        MoreZUpButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MoreZUpButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(19, 19, 19)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(194, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                            .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jSlider1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                            .addComponent(jSlider2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                            .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(MoreLeftButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(LeftButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(MoreUpButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(54, 54, 54)
+                                .addComponent(RightButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(DownButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(MoreDownButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(MoreZUpButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ZUpButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ZDownButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(MoreZDownButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(MoreRightButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(222, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addGap(12, 12, 12)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6)
+                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(MoreZUpButton)
+                    .addComponent(MoreUpButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ZUpButton)
+                    .addComponent(TopButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(MoreLeftButton)
+                    .addComponent(LeftButton)
+                    .addComponent(RightButton)
+                    .addComponent(MoreRightButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(DownButton)
+                    .addComponent(ZDownButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(MoreDownButton)
+                    .addComponent(MoreZDownButton))
+                .addContainerGap(92, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // X
+        String new_val = jTextField5.getText();
+        try {
+            Double.parseDouble(new_val);
+        } catch (NumberFormatException e) {
+            return;
+        }
+        get_http("http://10.156.2.107:5000/move/2/" + new_val);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // Y
+        String new_val = jTextField4.getText();
+        try {
+            Double.parseDouble(new_val);
+        } catch (NumberFormatException e) {
+            return;
+        }
+        get_http("http://10.156.2.107:5000/move/3/" + new_val);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // Z
+        String new_val = jTextField6.getText();
+        try {
+            Double.parseDouble(new_val);
+        } catch (NumberFormatException e) {
+            return;
+        }
+        get_http("http://10.156.2.107:5000/move/1/" + new_val);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void MoreLeftButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoreLeftButtonActionPerformed
+        update_positions();
+    }//GEN-LAST:event_MoreLeftButtonActionPerformed
+
+    private void LeftButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LeftButtonActionPerformed
+        update_positions();
+    }//GEN-LAST:event_LeftButtonActionPerformed
+
+    private void RightButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RightButtonActionPerformed
+        update_positions();
+    }//GEN-LAST:event_RightButtonActionPerformed
+
+    private void MoreRightButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoreRightButtonActionPerformed
+        update_positions();
+    }//GEN-LAST:event_MoreRightButtonActionPerformed
+
+    private void MoreUpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoreUpButtonActionPerformed
+        update_positions();
+    }//GEN-LAST:event_MoreUpButtonActionPerformed
+
+    private void TopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TopButtonActionPerformed
+        update_positions();
+    }//GEN-LAST:event_TopButtonActionPerformed
+
+    private void DownButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DownButtonActionPerformed
+        update_positions();
+    }//GEN-LAST:event_DownButtonActionPerformed
+
+    private void MoreDownButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoreDownButtonActionPerformed
+        update_positions();
+    }//GEN-LAST:event_MoreDownButtonActionPerformed
+
+    private void MoreZDownButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoreZDownButtonActionPerformed
+        update_positions();
+        double new_step = current_positions.get(1);
+        new_step -= get_step_size();
+        if(new_step < 0) new_step = 0.0;
+        get_http("http://10.156.2.107:5000/move/1/" + new_step);
+    }//GEN-LAST:event_MoreZDownButtonActionPerformed
+
+    private void ZDownButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ZDownButtonActionPerformed
+        update_positions();
+        double new_step = current_positions.get(1);
+        new_step -= get_big_step_size();
+        if(new_step < 0) new_step = 0.0;
+        get_http("http://10.156.2.107:5000/move/1/" + new_step);
+    }//GEN-LAST:event_ZDownButtonActionPerformed
+
+    private void ZUpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ZUpButtonActionPerformed
+        update_positions();
+        double new_step = current_positions.get(1);
+        new_step += get_step_size();
+        if(new_step > 25) new_step = 25.0;
+        get_http("http://10.156.2.107:5000/move/1/" + new_step);
+    }//GEN-LAST:event_ZUpButtonActionPerformed
+
+    private void MoreZUpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoreZUpButtonActionPerformed
+        update_positions();
+        double new_step = current_positions.get(1);
+        new_step += get_big_step_size();
+        if(new_step > 25) new_step = 25.0;
+        get_http("http://10.156.2.107:5000/move/1/" + new_step);
+    }//GEN-LAST:event_MoreZUpButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -166,7 +581,7 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
         while (true) {
             this.update_positions();
             try {
-                Thread.sleep(250);
+                Thread.sleep(1000);
             } catch (InterruptedException ex) {
             }
         }
@@ -181,13 +596,61 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
             current_positions.replace(k, v);
         }
         System.out.println("New positions = " + current_positions);
+
+        jSlider1.setValue((int) Math.round(current_positions.get(1)));
+        jSlider2.setValue((int) Math.round(current_positions.get(3)));
+        jSlider3.setValue((int) Math.round(current_positions.get(2)));
+
+        jTextField1.setText(String.valueOf(current_positions.get(1)));
+        jTextField2.setText(String.valueOf(current_positions.get(3)));
+        jTextField3.setText(String.valueOf(current_positions.get(2)));
+    }
+    
+    public double get_step_size() {
+        return .1;
+    }
+    
+    public double get_big_step_size() {
+        return 1;
     }
 
     private Map<Integer, Double> current_positions;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton DownButton;
+    private javax.swing.JButton LeftButton;
+    private javax.swing.JButton MoreDownButton;
+    private javax.swing.JButton MoreLeftButton;
+    private javax.swing.JButton MoreRightButton;
+    private javax.swing.JButton MoreUpButton;
+    private javax.swing.JButton MoreZDownButton;
+    private javax.swing.JButton MoreZUpButton;
+    private javax.swing.JButton RightButton;
+    private javax.swing.JButton TopButton;
+    private javax.swing.JButton ZDownButton;
+    private javax.swing.JButton ZUpButton;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JFrame jFrame1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSlider jSlider1;
     private javax.swing.JSlider jSlider2;
     private javax.swing.JSlider jSlider3;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextField5;
+    private javax.swing.JTextField jTextField6;
     // End of variables declaration//GEN-END:variables
 }
