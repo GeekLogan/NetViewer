@@ -6,6 +6,7 @@ package edu.umich.cailab;
 
 import com.google.gson.Gson;
 import ij.plugin.PlugIn;
+import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,6 +43,7 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
     }
 
     public String get_http(String url) {
+        System.out.println( "Requesting: " + url );
         byte[] targetArray;
         try {
             this.http_lock.lock();
@@ -102,6 +104,7 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jFrame1 = new javax.swing.JFrame();
+        jSeparator3 = new javax.swing.JSeparator();
         jSlider1 = new javax.swing.JSlider();
         jTextField1 = new javax.swing.JTextField();
         jSlider2 = new javax.swing.JSlider();
@@ -188,6 +191,7 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
         jSlider3.setMinimum(-50);
         jSlider3.setValue(0);
         jSlider3.setEnabled(false);
+        jSlider3.setFocusTraversalKeysEnabled(false);
 
         jTextField3.setEditable(false);
         jTextField3.setHorizontalAlignment(javax.swing.JTextField.LEFT);
@@ -349,9 +353,29 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "OFF", "small", "large" }));
 
         bigStepText.setText("1.0");
+        bigStepText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bigStepTextActionPerformed(evt);
+            }
+        });
+        bigStepText.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                bigStepTextKeyReleased(evt);
+            }
+        });
 
         smallStepText.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         smallStepText.setText("0.1");
+        smallStepText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                smallStepTextActionPerformed(evt);
+            }
+        });
+        smallStepText.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                smallStepTextKeyReleased(evt);
+            }
+        });
 
         ModeSelectText.setText("Keyboard Mode");
 
@@ -399,6 +423,7 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
@@ -424,8 +449,7 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
                             .addComponent(ZUpButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(ZDownButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(MoreZDownButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(MoreRightButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(MoreRightButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -498,65 +522,94 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
         // X
         String new_val = xGoText.getText();
         try {
-            Double.parseDouble(new_val);
+            double new_val_fmt = Double.parseDouble(new_val);
+            change_axis(2, new_val_fmt);
         } catch (NumberFormatException e) {
-            return;
         }
-        get_http("http://10.156.2.107:5000/move/2/" + new_val);
     }//GEN-LAST:event_xGoButtonActionPerformed
 
     private void yGoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yGoButtonActionPerformed
         // Y
         String new_val = yGoText.getText();
         try {
-            Double.parseDouble(new_val);
+            double new_val_fmt = Double.parseDouble(new_val);
+            change_axis(3, new_val_fmt);
         } catch (NumberFormatException e) {
-            return;
         }
-        get_http("http://10.156.2.107:5000/move/3/" + new_val);
     }//GEN-LAST:event_yGoButtonActionPerformed
 
     private void zGoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zGoButtonActionPerformed
         // Z
         String new_val = zGoText.getText();
         try {
-            Double.parseDouble(new_val);
+            double new_val_fmt = Double.parseDouble(new_val);
+            change_axis(1, new_val_fmt);
         } catch (NumberFormatException e) {
-            return;
         }
-        get_http("http://10.156.2.107:5000/move/1/" + new_val);
     }//GEN-LAST:event_zGoButtonActionPerformed
 
     private void MoreLeftButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoreLeftButtonActionPerformed
-        update_positions();
+        try {
+            double step = this.get_big_step_size() * -1.0;
+            this.step_axis(2, step, -49, 49);
+        } catch (NumberFormatException e) {
+        }
     }//GEN-LAST:event_MoreLeftButtonActionPerformed
 
     private void LeftButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LeftButtonActionPerformed
-        update_positions();
+        try {
+            double step = this.get_step_size() * -1.0;
+            this.step_axis(2, step, -49, 49);
+        } catch (NumberFormatException e) {
+        }
     }//GEN-LAST:event_LeftButtonActionPerformed
 
     private void RightButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RightButtonActionPerformed
-        update_positions();
+        try {
+            double step = this.get_step_size();
+            this.step_axis(2, step, -49, 49);
+        } catch (NumberFormatException e) {
+        }
     }//GEN-LAST:event_RightButtonActionPerformed
 
     private void MoreRightButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoreRightButtonActionPerformed
-        update_positions();
+        try {
+            double step = this.get_big_step_size();
+            this.step_axis(2, step, -49, 49);
+        } catch (NumberFormatException e) {
+        }
     }//GEN-LAST:event_MoreRightButtonActionPerformed
 
     private void MoreUpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoreUpButtonActionPerformed
-        update_positions();
+        try {
+            double step = this.get_big_step_size();
+            this.step_axis(3, step, -49, 49);
+        } catch (NumberFormatException e) {
+        }
     }//GEN-LAST:event_MoreUpButtonActionPerformed
 
     private void TopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TopButtonActionPerformed
-        update_positions();
+        try {
+            double step = this.get_step_size();
+            this.step_axis(3, step, -49, 49);
+        } catch (NumberFormatException e) {
+        }
     }//GEN-LAST:event_TopButtonActionPerformed
 
     private void DownButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DownButtonActionPerformed
-        update_positions();
+        try {
+            double step = this.get_step_size() * -1.0;
+            this.step_axis(3, step, -49, 49);
+        } catch (NumberFormatException e) {
+        }
     }//GEN-LAST:event_DownButtonActionPerformed
 
     private void MoreDownButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoreDownButtonActionPerformed
-        update_positions();
+        try {
+            double step = this.get_big_step_size() * -1.0;
+            this.step_axis(3, step, -49, 49);
+        } catch (NumberFormatException e) {
+        }
     }//GEN-LAST:event_MoreDownButtonActionPerformed
 
     private void MoreZDownButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoreZDownButtonActionPerformed
@@ -564,7 +617,6 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
             double step = this.get_big_step_size() * -1.0;
             this.step_axis(1, step, 0, 25);
         } catch (NumberFormatException e) {
-            return;
         }
     }//GEN-LAST:event_MoreZDownButtonActionPerformed
 
@@ -573,7 +625,6 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
             double step = this.get_step_size() * -1.0;
             this.step_axis(1, step, 0, 25);
         } catch (NumberFormatException e) {
-            return;
         }
     }//GEN-LAST:event_ZDownButtonActionPerformed
 
@@ -582,7 +633,6 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
             double step = this.get_step_size();
             this.step_axis(1, step, 0, 25);
         } catch (NumberFormatException e) {
-            return;
         }
     }//GEN-LAST:event_ZUpButtonActionPerformed
 
@@ -591,9 +641,36 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
             double step = this.get_big_step_size();
             this.step_axis(1, step, 0, 25);
         } catch (NumberFormatException e) {
-            return;
         }
     }//GEN-LAST:event_MoreZUpButtonActionPerformed
+
+    private void bigStepTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bigStepTextActionPerformed
+        String this_val = this.bigStepText.getText();
+        try {
+            Double.parseDouble(this_val);
+            this.bigStepText.setForeground(Color.BLACK);
+        } catch(NumberFormatException e) {
+            this.bigStepText.setForeground(Color.RED);
+        }
+    }//GEN-LAST:event_bigStepTextActionPerformed
+
+    private void bigStepTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_bigStepTextKeyReleased
+        this.bigStepTextActionPerformed(null);
+    }//GEN-LAST:event_bigStepTextKeyReleased
+
+    private void smallStepTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smallStepTextActionPerformed
+        String this_val = this.smallStepText.getText();
+        try {
+            Double.parseDouble(this_val);
+            this.smallStepText.setForeground(Color.BLACK);
+        } catch(NumberFormatException e) {
+            this.smallStepText.setForeground(Color.RED);
+        }
+    }//GEN-LAST:event_smallStepTextActionPerformed
+
+    private void smallStepTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_smallStepTextKeyReleased
+        this.smallStepTextActionPerformed(null);
+    }//GEN-LAST:event_smallStepTextKeyReleased
 
     /**
      * @param args the command line arguments
@@ -634,7 +711,7 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
         while (true) {
             this.update_positions();
             try {
-                Thread.sleep(1000);
+                Thread.sleep(500);
             } catch (InterruptedException ex) {
             }
         }
@@ -714,6 +791,7 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSlider jSlider1;
     private javax.swing.JSlider jSlider2;
     private javax.swing.JSlider jSlider3;
