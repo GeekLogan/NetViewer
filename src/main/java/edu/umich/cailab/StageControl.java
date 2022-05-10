@@ -15,14 +15,15 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.concurrent.locks.*;
 
 /**
  *
  * @author loganaw
  */
 public class StageControl extends javax.swing.JFrame implements PlugIn {
+
+    private Lock http_lock;
 
     public static void print_error(String err) {
         System.err.println(err);
@@ -40,25 +41,28 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
         return buffer.toByteArray();
     }
 
-    public static String get_http(String url) {
-        URL server_url;
-        try {
-            server_url = new URL(url);
-        } catch (MalformedURLException ex) {
-            print_error("Malformed URL Exception found.");
-            return "ERROR";
-        }
-
-        URLConnection conn;
+    public String get_http(String url) {
         byte[] targetArray;
         try {
-            System.out.println("Starting frame download...");
-            conn = server_url.openConnection();
-            InputStream is = conn.getInputStream();
-            targetArray = read_all_buffer(is);
-        } catch (IOException ex) {
-            print_error("IO Exception found.");
-            return "ERROR";
+            this.http_lock.lock();
+            URL server_url;
+            try {
+                server_url = new URL(url);
+            } catch (MalformedURLException ex) {
+                print_error("Malformed URL Exception found.");
+                return "ERROR";
+            }
+            URLConnection conn;
+            try {
+                conn = server_url.openConnection();
+                InputStream is = conn.getInputStream();
+                targetArray = read_all_buffer(is);
+            } catch (IOException ex) {
+                print_error("IO Exception found.");
+                return "ERROR";
+            }
+        } finally {
+            this.http_lock.unlock();
         }
 
         //System.out.println("Total data read: " + targetArray.length);
@@ -80,6 +84,8 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
         current_positions.put(1, 0.0);
         current_positions.put(2, 0.0);
         current_positions.put(3, 0.0);
+
+        this.http_lock = new ReentrantLock();
 
         this.setVisible(true);
     }
@@ -108,12 +114,12 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        yGoText = new javax.swing.JTextField();
+        xGoText = new javax.swing.JTextField();
+        zGoText = new javax.swing.JTextField();
+        xGoButton = new javax.swing.JButton();
+        yGoButton = new javax.swing.JButton();
+        zGoButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         MoreLeftButton = new javax.swing.JButton();
@@ -128,6 +134,10 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
         ZDownButton = new javax.swing.JButton();
         ZUpButton = new javax.swing.JButton();
         MoreZUpButton = new javax.swing.JButton();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        bigStepText = new javax.swing.JTextField();
+        smallStepText = new javax.swing.JTextField();
+        ModeSelectText = new javax.swing.JLabel();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -153,24 +163,40 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
         jSlider1.setValue(0);
         jSlider1.setEnabled(false);
 
+        jTextField1.setEditable(false);
+        jTextField1.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         jTextField1.setText("jTextField1");
-        jTextField1.setEnabled(false);
+        jTextField1.setFocusTraversalKeysEnabled(false);
+        jTextField1.setFocusable(false);
+        jTextField1.setMaximumSize(new java.awt.Dimension(80, 23));
+        jTextField1.setMinimumSize(new java.awt.Dimension(80, 23));
+        jTextField1.setPreferredSize(new java.awt.Dimension(80, 23));
 
         jSlider2.setMaximum(50);
         jSlider2.setMinimum(-50);
         jSlider2.setValue(0);
         jSlider2.setEnabled(false);
 
+        jTextField2.setEditable(false);
+        jTextField2.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         jTextField2.setText("jTextField1");
-        jTextField2.setEnabled(false);
+        jTextField2.setMaximumSize(new java.awt.Dimension(80, 23));
+        jTextField2.setMinimumSize(new java.awt.Dimension(80, 23));
+        jTextField2.setPreferredSize(new java.awt.Dimension(80, 23));
 
         jSlider3.setMaximum(50);
         jSlider3.setMinimum(-50);
         jSlider3.setValue(0);
         jSlider3.setEnabled(false);
 
+        jTextField3.setEditable(false);
+        jTextField3.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         jTextField3.setText("jTextField1");
-        jTextField3.setEnabled(false);
+        jTextField3.setFocusTraversalKeysEnabled(false);
+        jTextField3.setFocusable(false);
+        jTextField3.setMaximumSize(new java.awt.Dimension(80, 23));
+        jTextField3.setMinimumSize(new java.awt.Dimension(80, 23));
+        jTextField3.setPreferredSize(new java.awt.Dimension(80, 23));
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
         jLabel1.setText("X");
@@ -190,30 +216,30 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
         jLabel6.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
         jLabel6.setText("Z");
 
-        jTextField4.setText("0");
+        yGoText.setText("0");
 
-        jTextField5.setText("0");
+        xGoText.setText("0");
 
-        jTextField6.setText("0");
+        zGoText.setText("0");
 
-        jButton1.setText("GO");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        xGoButton.setText("GO");
+        xGoButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                xGoButtonActionPerformed(evt);
             }
         });
 
-        jButton2.setText("GO");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        yGoButton.setText("GO");
+        yGoButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                yGoButtonActionPerformed(evt);
             }
         });
 
-        jButton3.setText("GO");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        zGoButton.setText("GO");
+        zGoButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                zGoButtonActionPerformed(evt);
             }
         });
 
@@ -285,6 +311,7 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
             }
         });
 
+        MoreZDownButton.setBackground(new java.awt.Color(204, 255, 204));
         MoreZDownButton.setText("∨∨");
         MoreZDownButton.setToolTipText("");
         MoreZDownButton.addActionListener(new java.awt.event.ActionListener() {
@@ -293,6 +320,7 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
             }
         });
 
+        ZDownButton.setBackground(new java.awt.Color(204, 255, 204));
         ZDownButton.setText("∨∨");
         ZDownButton.setToolTipText("");
         ZDownButton.addActionListener(new java.awt.event.ActionListener() {
@@ -301,6 +329,7 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
             }
         });
 
+        ZUpButton.setBackground(new java.awt.Color(204, 255, 204));
         ZUpButton.setText("∧∧");
         ZUpButton.setToolTipText("");
         ZUpButton.addActionListener(new java.awt.event.ActionListener() {
@@ -309,12 +338,22 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
             }
         });
 
+        MoreZUpButton.setBackground(new java.awt.Color(204, 255, 204));
         MoreZUpButton.setText("∧∧");
         MoreZUpButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 MoreZUpButtonActionPerformed(evt);
             }
         });
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "OFF", "small", "large" }));
+
+        bigStepText.setText("1.0");
+
+        smallStepText.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        smallStepText.setText("0.1");
+
+        ModeSelectText.setText("Keyboard Mode");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -332,20 +371,20 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(xGoButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                            .addComponent(xGoText, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(yGoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                            .addComponent(yGoText, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                            .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(zGoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                            .addComponent(zGoText, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -361,10 +400,16 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(MoreLeftButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(MoreLeftButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(LeftButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ModeSelectText)
+                            .addComponent(bigStepText, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(smallStepText, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(LeftButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(5, 5, 5)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(MoreUpButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(TopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -407,24 +452,26 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
                     .addComponent(jLabel4)
                     .addComponent(jLabel5)
                     .addComponent(jLabel6)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(yGoText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(xGoText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(zGoText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(xGoButton)
+                    .addComponent(yGoButton)
+                    .addComponent(zGoButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(MoreZUpButton)
-                    .addComponent(MoreUpButton))
+                    .addComponent(MoreUpButton)
+                    .addComponent(bigStepText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ZUpButton)
-                    .addComponent(TopButton))
+                    .addComponent(TopButton)
+                    .addComponent(smallStepText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(MoreLeftButton)
@@ -434,49 +481,51 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(DownButton)
-                    .addComponent(ZDownButton))
+                    .addComponent(ZDownButton)
+                    .addComponent(ModeSelectText))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(MoreDownButton)
-                    .addComponent(MoreZDownButton))
+                    .addComponent(MoreZDownButton)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(92, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void xGoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_xGoButtonActionPerformed
         // X
-        String new_val = jTextField5.getText();
+        String new_val = xGoText.getText();
         try {
             Double.parseDouble(new_val);
         } catch (NumberFormatException e) {
             return;
         }
         get_http("http://10.156.2.107:5000/move/2/" + new_val);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_xGoButtonActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void yGoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yGoButtonActionPerformed
         // Y
-        String new_val = jTextField4.getText();
+        String new_val = yGoText.getText();
         try {
             Double.parseDouble(new_val);
         } catch (NumberFormatException e) {
             return;
         }
         get_http("http://10.156.2.107:5000/move/3/" + new_val);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_yGoButtonActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void zGoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zGoButtonActionPerformed
         // Z
-        String new_val = jTextField6.getText();
+        String new_val = zGoText.getText();
         try {
             Double.parseDouble(new_val);
         } catch (NumberFormatException e) {
             return;
         }
         get_http("http://10.156.2.107:5000/move/1/" + new_val);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_zGoButtonActionPerformed
 
     private void MoreLeftButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoreLeftButtonActionPerformed
         update_positions();
@@ -511,35 +560,39 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
     }//GEN-LAST:event_MoreDownButtonActionPerformed
 
     private void MoreZDownButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoreZDownButtonActionPerformed
-        update_positions();
-        double new_step = current_positions.get(1);
-        new_step -= get_step_size();
-        if(new_step < 0) new_step = 0.0;
-        get_http("http://10.156.2.107:5000/move/1/" + new_step);
+        try {
+            double step = this.get_big_step_size() * -1.0;
+            this.step_axis(1, step, 0, 25);
+        } catch (NumberFormatException e) {
+            return;
+        }
     }//GEN-LAST:event_MoreZDownButtonActionPerformed
 
     private void ZDownButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ZDownButtonActionPerformed
-        update_positions();
-        double new_step = current_positions.get(1);
-        new_step -= get_big_step_size();
-        if(new_step < 0) new_step = 0.0;
-        get_http("http://10.156.2.107:5000/move/1/" + new_step);
+        try {
+            double step = this.get_step_size() * -1.0;
+            this.step_axis(1, step, 0, 25);
+        } catch (NumberFormatException e) {
+            return;
+        }
     }//GEN-LAST:event_ZDownButtonActionPerformed
 
     private void ZUpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ZUpButtonActionPerformed
-        update_positions();
-        double new_step = current_positions.get(1);
-        new_step += get_step_size();
-        if(new_step > 25) new_step = 25.0;
-        get_http("http://10.156.2.107:5000/move/1/" + new_step);
+        try {
+            double step = this.get_step_size();
+            this.step_axis(1, step, 0, 25);
+        } catch (NumberFormatException e) {
+            return;
+        }
     }//GEN-LAST:event_ZUpButtonActionPerformed
 
     private void MoreZUpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoreZUpButtonActionPerformed
-        update_positions();
-        double new_step = current_positions.get(1);
-        new_step += get_big_step_size();
-        if(new_step > 25) new_step = 25.0;
-        get_http("http://10.156.2.107:5000/move/1/" + new_step);
+        try {
+            double step = this.get_big_step_size();
+            this.step_axis(1, step, 0, 25);
+        } catch (NumberFormatException e) {
+            return;
+        }
     }//GEN-LAST:event_MoreZUpButtonActionPerformed
 
     /**
@@ -576,7 +629,7 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
 
     @Override
     public void run(String string) {
-        System.out.println("Yeet!");
+        System.out.println("Starting StageControl.");
 
         while (true) {
             this.update_positions();
@@ -585,6 +638,23 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
             } catch (InterruptedException ex) {
             }
         }
+    }
+
+    public void step_axis(int axis, double step, double min, double max) {
+        update_positions();
+        double new_step = current_positions.get(axis) + step;
+        if (new_step <= min) {
+            new_step = min;
+        }
+        if (new_step >= max) {
+            new_step = max;
+        }
+        this.change_axis(axis, new_step);
+    }
+
+    public void change_axis(int axis, double val) {
+        String val_fmt = String.format("%.5g%n", val);
+        get_http("http://10.156.2.107:5000/move/" + axis + "/" + val_fmt);
     }
 
     public void update_positions() {
@@ -605,13 +675,15 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
         jTextField2.setText(String.valueOf(current_positions.get(3)));
         jTextField3.setText(String.valueOf(current_positions.get(2)));
     }
-    
-    public double get_step_size() {
-        return .1;
+
+    public double get_step_size() throws NumberFormatException {
+        String new_val = smallStepText.getText();
+        return Double.parseDouble(new_val);
     }
-    
-    public double get_big_step_size() {
-        return 1;
+
+    public double get_big_step_size() throws NumberFormatException {
+        String new_val = bigStepText.getText();
+        return Double.parseDouble(new_val);
     }
 
     private Map<Integer, Double> current_positions;
@@ -619,6 +691,7 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton DownButton;
     private javax.swing.JButton LeftButton;
+    private javax.swing.JLabel ModeSelectText;
     private javax.swing.JButton MoreDownButton;
     private javax.swing.JButton MoreLeftButton;
     private javax.swing.JButton MoreRightButton;
@@ -629,9 +702,8 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
     private javax.swing.JButton TopButton;
     private javax.swing.JButton ZDownButton;
     private javax.swing.JButton ZUpButton;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JTextField bigStepText;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -649,8 +721,12 @@ public class StageControl extends javax.swing.JFrame implements PlugIn {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
+    private javax.swing.JTextField smallStepText;
+    private javax.swing.JButton xGoButton;
+    private javax.swing.JTextField xGoText;
+    private javax.swing.JButton yGoButton;
+    private javax.swing.JTextField yGoText;
+    private javax.swing.JButton zGoButton;
+    private javax.swing.JTextField zGoText;
     // End of variables declaration//GEN-END:variables
 }
